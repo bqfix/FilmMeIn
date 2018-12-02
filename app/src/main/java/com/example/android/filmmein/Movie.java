@@ -10,11 +10,11 @@ public class Movie {
     private String mTitle;
     private String mReleaseDate;
     private String mPosterImageLink;
-    private String mVoteAverage;
+    private double mVoteAverage;
     private String mPlotSynopsis;
 
     //Constructor
-    public Movie(String title, String releaseDate, String posterImageLink, String voteAverage, String plotSynopsis) {
+    public Movie(String title, String releaseDate, String posterImageLink, double voteAverage, String plotSynopsis) {
         mTitle = title;
         mReleaseDate = releaseDate; //TODO Use Datetime to reformat
         mPosterImageLink = posterImageLink;
@@ -36,7 +36,7 @@ public class Movie {
         return mPosterImageLink;
     }
 
-    public String getmVoteAverage() {
+    public double getmVoteAverage() {
         return mVoteAverage;
     }
 

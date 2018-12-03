@@ -13,6 +13,10 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
+    /*********************************************
+     * A class to create a custom adapter for    *
+     * use in the main activity's recycler view  *
+     *********************************************/
 
     private List<Movie> mMovies;
 

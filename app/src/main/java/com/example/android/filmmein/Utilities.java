@@ -5,6 +5,9 @@ import android.content.res.Resources;
 import android.util.DisplayMetrics;
 
 public class Utilities {
+    /*********************************************
+     * A class to hold helper methods            *
+     *********************************************/
 
     /** A method to dynamically check screen size and determine the number of columns a GridLayoutManager in a RecyclerView should create
      *

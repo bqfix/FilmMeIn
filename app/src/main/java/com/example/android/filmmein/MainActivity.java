@@ -13,6 +13,11 @@ import android.view.MenuItem;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+    /*********************************************
+     * The main class that displays a Recycler   *
+     * full of Movie Posters to be clicked on    *
+     *********************************************/
+
 
     //TEST VARIABLES
     private final String TEST_URL_STRING = "https://api.themoviedb.org/3/movie/550?api_key=47ba04034a3ebe6cffa7dbc0a0ae4dd8";

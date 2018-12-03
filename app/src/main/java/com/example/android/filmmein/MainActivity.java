@@ -12,7 +12,7 @@ import android.view.MenuItem;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieClickHandler {
     /*********************************************
      * The main class that displays a Recycler   *
      * full of Movie Posters to be clicked on    *
@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         GridLayoutManager layoutManager = new GridLayoutManager(this, numberOfColumns, LinearLayoutManager.VERTICAL, false);
         mResultsRecycler.setLayoutManager(layoutManager);
 
-        mMovieAdapter = new MovieAdapter();
+        mMovieAdapter = new MovieAdapter(this);
         mResultsRecycler.setAdapter(mMovieAdapter);
 
         //TODO Create custom ItemDecoration to space grid items better
@@ -84,5 +84,14 @@ public class MainActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+    //Item Click Logic, use the movie that was passed from the ViewHolder's onClickListener, and start intent
+    @Override
+    public void onItemClick(Movie movie) {
+        Intent detailIntent = new Intent(MainActivity.this, DetailActivity.class);
+        detailIntent.putExtra("movie", movie);
+        startActivity(detailIntent);
     }
 }

@@ -20,14 +20,16 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     private List<Movie> mMovies;
 
-    MovieAdapter() {
+    private final MovieClickHandler mMovieClickHandler;
 
+    MovieAdapter(MovieClickHandler movieClickHandler) {
+        mMovieClickHandler = movieClickHandler;
     }
 
 
 
     //Inner ViewHolder Class
-    public class MovieViewHolder extends RecyclerView.ViewHolder {
+    public class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView mPosterView;
 
         //Constructor
@@ -35,6 +37,16 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
             super(itemView);
 
             mPosterView = (ImageView) itemView.findViewById(R.id.recycler_poster_iv);
+
+            itemView.setOnClickListener(this);
+        }
+
+        //On click, pass the Movie to the MovieClickHandler interface
+        @Override
+        public void onClick(View v) {
+            int adapterPosition = getAdapterPosition();
+            Movie movie = mMovies.get(adapterPosition);
+            mMovieClickHandler.onItemClick(movie);
         }
     }
 
@@ -76,5 +88,10 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     public void setNewsStories(List<Movie> movies) {
         mMovies = movies;
         notifyDataSetChanged();
+    }
+
+    //Interface to handle clicks, defined in MainActivity
+    public interface MovieClickHandler{
+        void onItemClick(Movie movie);
     }
 }

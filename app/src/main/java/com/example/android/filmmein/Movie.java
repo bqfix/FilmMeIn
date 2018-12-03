@@ -24,23 +24,23 @@ public class Movie {
 
     //Getter methods
 
-    public String getmTitle() {
+    public String getTitle() {
         return mTitle;
     }
 
-    public String getmReleaseDate() {
+    public String getReleaseDate() {
         return mReleaseDate;
     }
 
-    public String getmPosterImageLink() {
+    public String getPosterImageLink() {
         return mPosterImageLink;
     }
 
-    public double getmVoteAverage() {
+    public double getVoteAverage() {
         return mVoteAverage;
     }
 
-    public String getmPlotSynopsis() {
+    public String getPlotSynopsis() {
         return mPlotSynopsis;
     }
 }

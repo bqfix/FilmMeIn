@@ -16,8 +16,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     private List<Movie> mMovies;
 
-    MovieAdapter(List<Movie> movies) {
-        mMovies = movies;
+    MovieAdapter() {
+
     }
 
 
@@ -61,5 +61,16 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     @Override
     public int getItemCount() {
         return mMovies.size();
+    }
+
+    /**
+     * Helper method to set Movie List to existing MovieAdapter to prevent creating a new one
+     *
+     * @param movies the new set of movies to be displayed
+     */
+
+    public void setNewsStories(List<Movie> movies) {
+        mMovies = movies;
+        notifyDataSetChanged();
     }
 }

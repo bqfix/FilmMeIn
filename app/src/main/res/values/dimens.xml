@@ -3,4 +3,7 @@
     <!-- Size of posters in RecyclerView -->
     <dimen name="poster_width">136dp</dimen>
     <dimen name="poster_height">200dp</dimen>
+
+    <!-- Sizes in DetailActivity -->
+    <dimen name="detail_poster_height">120dp</dimen>
 </resources>

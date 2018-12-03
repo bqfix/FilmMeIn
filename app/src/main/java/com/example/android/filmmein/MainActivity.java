@@ -1,8 +1,9 @@
 package com.example.android.filmmein;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
@@ -43,12 +44,17 @@ public class MainActivity extends AppCompatActivity {
         //Assign member variables
         mResultsRecycler = (RecyclerView) findViewById(R.id.movie_rv);
 
+        //Measure screen size and determine number of columns that will fit
+        int numberOfColumns = Utilities.getNumberOfColumns(this);
+
         //Logic to Setup RecyclerView
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        GridLayoutManager layoutManager = new GridLayoutManager(this, numberOfColumns, LinearLayoutManager.VERTICAL, false);
         mResultsRecycler.setLayoutManager(layoutManager);
 
         mMovieAdapter = new MovieAdapter();
         mResultsRecycler.setAdapter(mMovieAdapter);
+
+        //TODO Create custom ItemDecoration to space grid items better
 
         //Temporary set of movie data for testing
         mMovieAdapter.setNewsStories(TEST_MOVIE_ARRAY);

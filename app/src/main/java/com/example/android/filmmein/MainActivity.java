@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     @Override
     public void onItemClick(Movie movie) {
         Intent detailIntent = new Intent(MainActivity.this, DetailActivity.class);
-        detailIntent.putExtra("movie", movie);
+        detailIntent.putExtra(getString(R.string.intent_extra_key), movie);
         startActivity(detailIntent);
     }
 }

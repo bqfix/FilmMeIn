@@ -13,15 +13,15 @@ public class Movie implements Parcelable {
     private String mTitle;
     private String mReleaseDate;
     private String mPosterImageLink;
-    private double mVoteAverage;
+    private double mVoterAverage;
     private String mPlotSynopsis;
 
     //Constructor
-    public Movie(String title, String releaseDate, String posterImageLink, double voteAverage, String plotSynopsis) {
+    public Movie(String title, String releaseDate, String posterImageLink, double voterAverage, String plotSynopsis) {
         mTitle = title;
         mReleaseDate = releaseDate; //TODO Use Datetime to reformat
         mPosterImageLink = posterImageLink;
-        mVoteAverage = voteAverage;
+        mVoterAverage = voterAverage;
         mPlotSynopsis = plotSynopsis;
     }
 
@@ -35,8 +35,8 @@ public class Movie implements Parcelable {
     public String getPosterImageLink() {
         return mPosterImageLink;
     }
-    public double getVoteAverage() {
-        return mVoteAverage;
+    public double getVoterAverage() {
+        return mVoterAverage;
     }
     public String getPlotSynopsis() {
         return mPlotSynopsis;
@@ -54,7 +54,7 @@ public class Movie implements Parcelable {
         dest.writeString(this.mTitle);
         dest.writeString(this.mReleaseDate);
         dest.writeString(this.mPosterImageLink);
-        dest.writeDouble(this.mVoteAverage);
+        dest.writeDouble(this.mVoterAverage);
         dest.writeString(this.mPlotSynopsis);
     }
 
@@ -62,7 +62,7 @@ public class Movie implements Parcelable {
         this.mTitle = in.readString();
         this.mReleaseDate = in.readString();
         this.mPosterImageLink = in.readString();
-        this.mVoteAverage = in.readDouble();
+        this.mVoterAverage = in.readDouble();
         this.mPlotSynopsis = in.readString();
     }
 

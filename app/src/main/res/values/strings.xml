@@ -2,12 +2,18 @@
     <string name="app_name">Film Me In</string>
 
     <!-- Main Activity Strings -->
-
     <string name="about">About</string>
-
     <string name="attribution">This product uses the TMDb API but is not endorsed or certified by TMDb.</string>
 
     <!-- About Activity Strings -->
     <string name="app_details">This app was created for a class on Udacity.com, as practice in developing Android applications.\n\nIt is not intended for commercial use.\n\nThis product uses the TMDb API but is not endorsed or certified by TMDb.</string>
 
+    <!-- Detail Activity Strings -->
+    <string name="release_date">Release Date:</string>
+    <string name="voter_average">Voter Average:</string>
+    <string name="synopsis">Plot Synopsis:</string>
+
+    <string name="intent_extra_key">movie</string>
+    <string name="detail_error_message">Movie details not found.</string>
+    
 </resources>

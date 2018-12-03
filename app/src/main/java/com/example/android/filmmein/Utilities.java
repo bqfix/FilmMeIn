@@ -18,7 +18,7 @@ public class Utilities {
         Resources resources = context.getResources();
         DisplayMetrics displayMetrics = resources.getDisplayMetrics();
         float screenWidth = displayMetrics.widthPixels / displayMetrics.density;
-        int posterWidth = (int) (resources.getDimension(R.dimen.poster_width) / displayMetrics.density);
+        int posterWidth = (int) (resources.getDimension(R.dimen.poster_width) / displayMetrics.density); //Divided by density to remove the dp from the accessed dimen
         return (int) (screenWidth/posterWidth);
     }
 

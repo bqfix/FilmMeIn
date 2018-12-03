@@ -1,6 +1,9 @@
 package com.example.android.filmmein;
 
-public class Movie {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Movie implements Parcelable {
     /*********************************************
      * A class to hold a movie object,           *
      * parsed from JSON from the theMovieDB API  *
@@ -23,24 +26,55 @@ public class Movie {
     }
 
     //Getter methods
-
     public String getTitle() {
         return mTitle;
     }
-
     public String getReleaseDate() {
         return mReleaseDate;
     }
-
     public String getPosterImageLink() {
         return mPosterImageLink;
     }
-
     public double getVoteAverage() {
         return mVoteAverage;
     }
-
     public String getPlotSynopsis() {
         return mPlotSynopsis;
     }
+
+
+    //Parcelable logic
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.mTitle);
+        dest.writeString(this.mReleaseDate);
+        dest.writeString(this.mPosterImageLink);
+        dest.writeDouble(this.mVoteAverage);
+        dest.writeString(this.mPlotSynopsis);
+    }
+
+    protected Movie(Parcel in) {
+        this.mTitle = in.readString();
+        this.mReleaseDate = in.readString();
+        this.mPosterImageLink = in.readString();
+        this.mVoteAverage = in.readDouble();
+        this.mPlotSynopsis = in.readString();
+    }
+
+    public static final Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>() {
+        @Override
+        public Movie createFromParcel(Parcel source) {
+            return new Movie(source);
+        }
+
+        @Override
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
 }

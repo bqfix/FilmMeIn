@@ -9,6 +9,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +24,8 @@ public class Utilities {
     /*********************************************
      * A class to hold helper methods            *
      *********************************************/
+
+    private static final String LOG_TAG = Utilities.class.getSimpleName();
 
     /** A method to dynamically check screen size and determine the number of columns a GridLayoutManager in a RecyclerView should create
      *
@@ -57,7 +67,7 @@ public class Utilities {
             }
 
         } catch (JSONException exception) {
-            Log.e(context.getClass().getSimpleName(), exception.getMessage());
+            Log.e(LOG_TAG, exception.getMessage());
         }
 
 
@@ -65,5 +75,86 @@ public class Utilities {
     }
 
 
-    //TODO Add methods for building url, and making http request
+    /**
+     * Builds the URL
+     *
+     * @param stringUrl the url to be input
+     * @return The URL to query
+     */
+    public static URL buildURL(String stringUrl) {
+        URL url = null;
+        try {
+            url = new URL(stringUrl);
+        } catch (MalformedURLException exception) {
+            Log.e(LOG_TAG, exception.getMessage());
+        }
+        return url;
+    }
+
+    /**
+     * Method to make the initial Http request
+     *
+     * @param url the url to be used (likely generated from buildURL method)
+     * @return a string with the full JSON response to be parsed by extractStories method
+     */
+    public static String makeHttpRequest(URL url) {
+        String jsonResponse = "";
+        if (url == null) {
+            return jsonResponse;
+        }
+
+        HttpURLConnection urlConnection = null;
+        InputStream inputStream = null;
+        try {
+            urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setRequestMethod("GET");
+            urlConnection.connect();
+
+            //Read data if valid connection was made
+            int responseCode = urlConnection.getResponseCode();
+            if (responseCode == 200) {
+                inputStream = urlConnection.getInputStream();
+                jsonResponse = readFromStream(inputStream);
+            } else {
+                Log.e(LOG_TAG, "Error response code: " + responseCode);
+            }
+        } catch (IOException exception) {
+            Log.e(LOG_TAG, "Could not connect");
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+            try {
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+            } catch (IOException exception) {
+                Log.e(LOG_TAG, "Failed to close input stream");
+            }
+
+        }
+        return jsonResponse;
+    }
+
+
+    /**
+     * Helper method to perform the reading from the input stream
+     *
+     * @param inputStream provided from the makeHttpRequest method
+     * @return a built JSONResponse to be returned by the makeHttpRequest method
+     * @throws IOException that is handled by the makeHttpRequest method which calls this method
+     */
+    private static String readFromStream(InputStream inputStream) throws IOException {
+        StringBuilder output = new StringBuilder();
+        if (inputStream != null) {
+            InputStreamReader inputStreamReader = new InputStreamReader(inputStream, Charset.forName("UTF-8"));
+            BufferedReader reader = new BufferedReader(inputStreamReader);
+            String line = reader.readLine();
+            while (line != null) {
+                output.append(line);
+                line = reader.readLine();
+            }
+        }
+        return output.toString();
+    }
 }

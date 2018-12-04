@@ -4,6 +4,7 @@
     <!-- Main Activity Strings -->
     <string name="about">About</string>
     <string name="attribution">This product uses the TMDb API but is not endorsed or certified by TMDb.</string>
+    <string name="error_text">An error occurred.</string>
 
     <!-- About Activity Strings -->
     <string name="app_details">This app was created for a class on Udacity.com, as practice in developing Android applications.\n\nIt is not intended for commercial use.\n\nThis product uses the TMDb API but is not endorsed or certified by TMDb.</string>

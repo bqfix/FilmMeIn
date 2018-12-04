@@ -1,7 +1,16 @@
 package com.example.android.filmmein;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.AsyncTaskLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,26 +18,28 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieClickHandler {
+public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieClickHandler, LoaderManager.LoaderCallbacks<List<Movie>> {
     /*********************************************
      * The main class that displays a Recycler   *
      * full of Movie Posters to be clicked on    *
      *********************************************/
 
-
-    //TEST VARIABLES
-    private final String TEST_URL_STRING = "https://api.themoviedb.org/3/search/movie?api_key={api-key}&query=Fight";
-
-    //END OF TEST VARIABLES
-
     //Member Variables
     private RecyclerView mResultsRecycler;
     private MovieAdapter mMovieAdapter;
+    private ProgressBar mProgressIndicator;
+    private TextView mErrorText;
+
+    private final String BASE_URL = "https://api.themoviedb.org/3/discover/movie?api_key={api-key}&language=en-US&include_adult=false&include_video=false&page=1&sort_by=popularity.desc";
+
+    private final int LOADER_ID = 77;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +48,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
         //Assign member variables
         mResultsRecycler = (RecyclerView) findViewById(R.id.movie_rv);
+        mProgressIndicator = (ProgressBar) findViewById(R.id.progress_indicator);
+        mErrorText = (TextView) findViewById(R.id.error_text);
 
         //Measure screen size and determine number of columns that will fit
         int numberOfColumns = Utilities.getNumberOfColumns(this);
@@ -50,14 +63,17 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
         //TODO Create custom ItemDecoration to space grid items better
 
-        //Temporary set of movie data for testing
-        URL url = Utilities.buildURL(TEST_URL_STRING);
+        //Check network connectivity
+        ConnectivityManager cm = (ConnectivityManager) getApplicationContext().getSystemService(CONNECTIVITY_SERVICE);
 
-        String jsonResponse = Utilities.makeHttpRequest(url);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
 
-        List<Movie> movies = Utilities.parseJSON(this, jsonResponse);
-
-        mMovieAdapter.setNewsStories(movies);
+        if (activeNetwork != null) {
+            showProgress();
+            getSupportLoaderManager().initLoader(LOADER_ID, null, this);
+        } else {
+            showErrorText();
+        }
 
 
     }
@@ -88,5 +104,54 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         Intent detailIntent = new Intent(MainActivity.this, DetailActivity.class);
         detailIntent.putExtra(getString(R.string.intent_extra_key), movie);
         startActivity(detailIntent);
+    }
+
+
+    //Overrides of LoaderCallback methods
+    @NonNull
+    @Override
+    public Loader onCreateLoader(int i, @Nullable Bundle bundle) {
+        Uri baseUri = Uri.parse(BASE_URL);
+
+        //TODO implement differences for sortby popularity and highest rated
+
+        return new MovieLoader(this, baseUri.toString());
+    }
+
+    @Override
+    public void onLoadFinished(@NonNull Loader<List<Movie>> loader, List<Movie> movies) {
+        //Set movies to RecyclerView
+        mMovieAdapter.setNewsStories(movies);
+
+        //Show Error or Results
+        if (movies != null && !movies.isEmpty()) {
+            showResults();
+        } else {
+            showErrorText();
+        }
+    }
+
+    @Override
+    public void onLoaderReset(@NonNull Loader loader) {
+
+    }
+
+    //Helper methods for showing results recycler view, progress bar, and error text
+    void showResults() {
+        mErrorText.setVisibility(View.INVISIBLE);
+        mProgressIndicator.setVisibility(View.INVISIBLE);
+        mResultsRecycler.setVisibility(View.VISIBLE);
+    }
+
+    void showProgress() {
+        mErrorText.setVisibility(View.INVISIBLE);
+        mResultsRecycler.setVisibility(View.INVISIBLE);
+        mProgressIndicator.setVisibility(View.VISIBLE);
+    }
+
+    void showErrorText() {
+        mProgressIndicator.setVisibility(View.INVISIBLE);
+        mResultsRecycler.setVisibility(View.INVISIBLE);
+        mErrorText.setVisibility(View.VISIBLE);
     }
 }

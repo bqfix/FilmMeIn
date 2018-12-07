@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -53,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Log.e("MAIN ACTIVITY", "ONCREATE CALLED");
 
         //Assign member variables
         mResultsRecycler = (RecyclerView) findViewById(R.id.movie_rv);
@@ -79,10 +81,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSortBySpinner.setAdapter(spinnerAdapter);
 
-        //Check network connectivity
-        ConnectivityManager cm = (ConnectivityManager) getApplicationContext().getSystemService(CONNECTIVITY_SERVICE);
 
-        final NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
 
         //Check for saved movie results
         if (savedInstanceState != null) {
@@ -93,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
                 mMovieResults = savedMovies;
             } else {
                 //Else check network status and initiate or restart Loader
-                checkNetworkStatusAndExecute(activeNetwork);
+                checkNetworkStatusAndExecute();
             }
             //Attempt to restore get value of spinner from SavedInstanceState for comparison in OnItemSelectedListener
             if (savedInstanceState.containsKey(getString(R.string.spinner_value_key))) {
@@ -102,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
         } else {
             //Else check network status and initiate or restart Loader
-            checkNetworkStatusAndExecute(activeNetwork);
+            checkNetworkStatusAndExecute();
 
             //On Initial Creation, save value of spinner for comparison in OnItemSelectedListener
             mSavedSortBySelection = mSortBySpinner.getSelectedItem().toString();
@@ -116,7 +115,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
                 //This if-else is necessary to prevent unnecessary Loader requests when loading from savedInstanceState
                 //Compare spinner value to currently saved String
                 if (!(newlySelectedSortBySelection.equals(mSavedSortBySelection))) {
-                    checkNetworkStatusAndExecute(activeNetwork); //Create new loader request if it is has changed (i.e. user has selected a new value)
+                    checkNetworkStatusAndExecute(); //Create new loader request if it is has changed (i.e. user has selected a new value)
                     mSavedSortBySelection = newlySelectedSortBySelection;
                 } //Else, do not make a Loader request
             }
@@ -131,7 +130,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         mErrorText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                checkNetworkStatusAndExecute(activeNetwork);
+                checkNetworkStatusAndExecute();
             }
         });
     }
@@ -224,7 +223,11 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     }
 
     //Helper method to check network status and initiate loader or otherwise show an error
-    void checkNetworkStatusAndExecute(NetworkInfo activeNetwork) {
+    void checkNetworkStatusAndExecute() {
+        //Check network connectivity
+        ConnectivityManager cm = (ConnectivityManager) getApplicationContext().getSystemService(CONNECTIVITY_SERVICE);
+        final NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+
         if (activeNetwork != null) {
             showProgress();
             getSupportLoaderManager().restartLoader(LOADER_ID, null, this);
@@ -243,6 +246,4 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         String currentSpinnerValue = mSortBySpinner.getSelectedItem().toString();
         outState.putString(getString(R.string.spinner_value_key), currentSpinnerValue);
     }
-
-
 }

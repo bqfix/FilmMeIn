@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -24,6 +25,7 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieClickHandler, LoaderManager.LoaderCallbacks<List<Movie>> {
@@ -39,10 +41,14 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private TextView mErrorText;
     private LinearLayout mRecyclerLayout;
     private Spinner mSortBySpinner;
+    private List<Movie> mMovieResults;
 
-    private final String BASE_URL = "https://api.themoviedb.org/3/discover/movie?api_key=47ba04034a3ebe6cffa7dbc0a0ae4dd8&language=en-US&include_adult=false&include_video=false&page=1";
+    private final String BASE_URL = "https://api.themoviedb.org/3/discover/movie?api_key={api-key}&language=en-US&include_adult=false&include_video=false&page=1";
 
     private final int LOADER_ID = 77;
+
+    //String to keep current value of Sort By Spinner
+    private String mSavedSortBySelection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,34 +76,57 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         //TODO Create custom ItemDecoration to space grid items better
 
         //Set Spinner options
-        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this,R.array.sort_by_array, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this, R.array.sort_by_array, android.R.layout.simple_spinner_item);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSortBySpinner.setAdapter(spinnerAdapter);
 
         //Check network connectivity
         ConnectivityManager cm = (ConnectivityManager) getApplicationContext().getSystemService(CONNECTIVITY_SERVICE);
 
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        final NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
 
-        if (activeNetwork != null) {
-            showProgress();
-            getSupportLoaderManager().initLoader(LOADER_ID, null, this);
+        //Check for saved movie results
+        if (savedInstanceState != null) {
+            if (savedInstanceState.containsKey(getString(R.string.movie_results_key))) {
+                //Set movies if saved list exists
+                List <Movie> savedMovies = savedInstanceState.getParcelableArrayList(getString(R.string.movie_results_key));
+                mMovieAdapter.setMovies(savedMovies);
+                mMovieResults = savedMovies;
+            } else {
+                //Else check network status and initiate or restart Loader
+                checkNetworkStatus(activeNetwork);
+            }
+            //Attempt to restore get value of spinner from SavedInstanceState for comparison in OnItemSelectedListener
+            if (savedInstanceState.containsKey(getString(R.string.spinner_value_key))) {
+                mSavedSortBySelection = savedInstanceState.getString(getString(R.string.spinner_value_key));
+            }
+
         } else {
-            showErrorText();
+            //Else check network status and initiate or restart Loader
+            checkNetworkStatus(activeNetwork);
+
+            //On Initial Creation, save value of spinner for comparison in OnItemSelectedListener
+            mSavedSortBySelection = mSortBySpinner.getSelectedItem().toString();
         }
 
-
+        //Set OnItemSelectedListener to spinner
         mSortBySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                getSupportLoaderManager().restartLoader(LOADER_ID,null,MainActivity.this);
+                String newlySelectedSortBySelection = mSortBySpinner.getSelectedItem().toString();
+                //This if-else is necessary to prevent unnecessary Loader requests when loading from savedInstanceState
+                //Compare spinner value to currently saved String
+                if (!(newlySelectedSortBySelection.equals(mSavedSortBySelection))) {
+                    checkNetworkStatus(activeNetwork); //Create new loader request if it is has changed (i.e. user has selected a new value)
+                    mSavedSortBySelection = newlySelectedSortBySelection;
+                } //Else, do not make a Loader request
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
             }
         });
+
 
 
     }
@@ -112,9 +141,9 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case (R.id.action_about) :
-                Intent aboutIntent = new Intent(MainActivity.this,AboutActivity.class);
+        switch (item.getItemId()) {
+            case (R.id.action_about):
+                Intent aboutIntent = new Intent(MainActivity.this, AboutActivity.class);
                 startActivity(aboutIntent);
                 return true;
         }
@@ -148,17 +177,17 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
         Uri builtUri = builder.build();
 
-
         return new MovieLoader(this, builtUri.toString());
     }
 
     @Override
     public void onLoadFinished(@NonNull Loader<List<Movie>> loader, List<Movie> movies) {
         //Set movies to RecyclerView
-        mMovieAdapter.setNewsStories(movies);
+        mMovieAdapter.setMovies(movies);
 
         //Show Error or Results
         if (movies != null && !movies.isEmpty()) {
+            mMovieResults = movies; //Save current set of movies as member variable
             showResults();
         } else {
             showErrorText();
@@ -189,5 +218,24 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         mErrorText.setVisibility(View.VISIBLE);
     }
 
-    //TODO implement onSavedInstanceState
+    //Helper method to check network status and initiate loader or otherwise show an error
+    void checkNetworkStatus(NetworkInfo activeNetwork){
+        if (activeNetwork != null) {
+            showProgress();
+            getSupportLoaderManager().restartLoader(LOADER_ID, null, this);
+        } else {
+            showErrorText();
+        }
+    }
+
+    //SaveInstanceState logic
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        //Save current Movies
+        outState.putParcelableArrayList(getString(R.string.movie_results_key), (ArrayList<Movie>) mMovieResults);
+        //Save value of spinner
+        String currentSpinnerValue = mSortBySpinner.getSelectedItem().toString();
+        outState.putString(getString(R.string.spinner_value_key), currentSpinnerValue);
+    }
 }

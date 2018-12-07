@@ -86,7 +86,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
      * @param movies the new set of movies to be displayed
      */
 
-    public void setNewsStories(List<Movie> movies) {
+    public void setMovies(List<Movie> movies) {
         mMovies = movies;
         notifyDataSetChanged();
     }

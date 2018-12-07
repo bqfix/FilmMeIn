@@ -12,8 +12,8 @@
     </string-array>
     <string name="most_popular">Most Popular</string>
     <string name="highest_rated">Highest Rated</string>
-    <string name="movie_results_key">movie_results</string>
-    <string name="spinner_value_key">spinner_value</string>
+    <string name="movie_results_key" translatable="false">movie_results</string>
+    <string name="spinner_value_key" translatable="false">spinner_value</string>
 
     <!-- About Activity Strings -->
     <string name="app_details">This app was created for a class on Udacity.com, as practice in developing Android applications.\n\nIt is not intended for commercial use.\n\nThis product uses the TMDb API but is not endorsed or certified by TMDb.</string>
@@ -23,19 +23,19 @@
     <string name="voter_average">Voter Average:</string>
     <string name="synopsis">Plot Synopsis:</string>
 
-    <string name="intent_extra_key">movie</string>
+    <string name="intent_extra_key" translatable="false">movie</string>
     <string name="detail_error_message">Movie details not found.</string>
 
     <!-- Utilities Strings -->
     <!-- JSON Keys -->
-    <string name="json_results_key">results</string>
-    <string name="title_key">title</string>
-    <string name="release_date_key">release_date</string>
-    <string name="poster_image_link_key">poster_path</string>
-    <string name="voter_average_key">vote_average</string>
-    <string name="plot_synopsis_key">overview</string>
+    <string name="json_results_key" translatable="false">results</string>
+    <string name="title_key" translatable="false">title</string>
+    <string name="release_date_key" translatable="false">release_date</string>
+    <string name="poster_image_link_key" translatable="false">poster_path</string>
+    <string name="voter_average_key" translatable="false">vote_average</string>
+    <string name="plot_synopsis_key" translatable="false">overview</string>
 
     <!-- Poster Image Link Start -->
-    <string name="poster_image_link_base">http://image.tmdb.org/t/p/original</string>
+    <string name="poster_image_link_base" translatable="false">http://image.tmdb.org/t/p/original</string>
     
 </resources>

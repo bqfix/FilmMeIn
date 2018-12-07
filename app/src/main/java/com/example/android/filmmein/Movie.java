@@ -2,6 +2,11 @@ package com.example.android.filmmein;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class Movie implements Parcelable {
     /*********************************************
@@ -16,13 +21,26 @@ public class Movie implements Parcelable {
     private double mVoterAverage;
     private String mPlotSynopsis;
 
+    private final String LOG_TAG = getClass().getSimpleName();
+
     //Constructor
     public Movie(String title, String releaseDate, String posterImageLink, double voterAverage, String plotSynopsis) {
         mTitle = title;
-        mReleaseDate = releaseDate; //TODO Use Datetime to reformat
         mPosterImageLink = posterImageLink;
         mVoterAverage = voterAverage;
         mPlotSynopsis = plotSynopsis;
+
+        //Automatically format date
+        try {
+            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat outputFormat = new SimpleDateFormat("MMMM dd, yyyy", Locale.US);
+
+            Date inputDate = inputFormat.parse(releaseDate);
+            mReleaseDate = outputFormat.format(inputDate);
+        } catch (ParseException exception) {
+            mReleaseDate = null;
+            Log.e(LOG_TAG, exception.getMessage());
+        }
     }
 
     //Getter methods

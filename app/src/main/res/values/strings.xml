@@ -4,7 +4,7 @@
     <!-- Main Activity Strings -->
     <string name="about">About</string>
     <string name="attribution">This product uses the TMDb API but is not endorsed or certified by TMDb.</string>
-    <string name="error_text">An error occurred.</string>
+    <string name="error_text">An error occurred.\n\nClick anywhere to refresh.</string>
     <string name="sort_by">Sort by:</string>
     <string-array name="sort_by_array">
         <item>@string/most_popular</item>

@@ -13,7 +13,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -89,12 +88,12 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey(getString(R.string.movie_results_key))) {
                 //Set movies if saved list exists
-                List <Movie> savedMovies = savedInstanceState.getParcelableArrayList(getString(R.string.movie_results_key));
+                List<Movie> savedMovies = savedInstanceState.getParcelableArrayList(getString(R.string.movie_results_key));
                 mMovieAdapter.setMovies(savedMovies);
                 mMovieResults = savedMovies;
             } else {
                 //Else check network status and initiate or restart Loader
-                checkNetworkStatus(activeNetwork);
+                checkNetworkStatusAndExecute(activeNetwork);
             }
             //Attempt to restore get value of spinner from SavedInstanceState for comparison in OnItemSelectedListener
             if (savedInstanceState.containsKey(getString(R.string.spinner_value_key))) {
@@ -103,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
         } else {
             //Else check network status and initiate or restart Loader
-            checkNetworkStatus(activeNetwork);
+            checkNetworkStatusAndExecute(activeNetwork);
 
             //On Initial Creation, save value of spinner for comparison in OnItemSelectedListener
             mSavedSortBySelection = mSortBySpinner.getSelectedItem().toString();
@@ -117,18 +116,24 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
                 //This if-else is necessary to prevent unnecessary Loader requests when loading from savedInstanceState
                 //Compare spinner value to currently saved String
                 if (!(newlySelectedSortBySelection.equals(mSavedSortBySelection))) {
-                    checkNetworkStatus(activeNetwork); //Create new loader request if it is has changed (i.e. user has selected a new value)
+                    checkNetworkStatusAndExecute(activeNetwork); //Create new loader request if it is has changed (i.e. user has selected a new value)
                     mSavedSortBySelection = newlySelectedSortBySelection;
                 } //Else, do not make a Loader request
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
             }
         });
 
-
-
+        //Add refresh capability to error screen
+        mErrorText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkNetworkStatusAndExecute(activeNetwork);
+            }
+        });
     }
 
     //Menu creation logic
@@ -219,7 +224,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     }
 
     //Helper method to check network status and initiate loader or otherwise show an error
-    void checkNetworkStatus(NetworkInfo activeNetwork){
+    void checkNetworkStatusAndExecute(NetworkInfo activeNetwork) {
         if (activeNetwork != null) {
             showProgress();
             getSupportLoaderManager().restartLoader(LOADER_ID, null, this);
@@ -238,4 +243,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         String currentSpinnerValue = mSortBySpinner.getSelectedItem().toString();
         outState.putString(getString(R.string.spinner_value_key), currentSpinnerValue);
     }
+
+
 }

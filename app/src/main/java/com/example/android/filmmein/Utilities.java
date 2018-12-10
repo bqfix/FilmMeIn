@@ -35,10 +35,12 @@ public class Utilities {
     public static int getNumberOfColumns(Context context) {
         Resources resources = context.getResources();
         DisplayMetrics displayMetrics = resources.getDisplayMetrics();
-        float screenWidth = displayMetrics.widthPixels / displayMetrics.density;
-        int posterWidth = (int) (resources.getDimension(R.dimen.poster_width) / displayMetrics.density); //Divided by density to remove the dp from the accessed dimen
+        float density = displayMetrics.density;
+        float screenWidth = displayMetrics.widthPixels / density;
+        int posterWidth = (int) (resources.getDimension(R.dimen.poster_width) / density); //Divided by density to remove the dp from the accessed dimen
         return (int) (screenWidth/posterWidth);
     }
+
 
 
     /** A method to return a List of Movies from the given JSON (likely provided from an http request made to TMdB)

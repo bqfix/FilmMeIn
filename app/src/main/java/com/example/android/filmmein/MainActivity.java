@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private Spinner mSortBySpinner;
     private List<Movie> mMovieResults;
 
-    private final String BASE_URL = "https://api.themoviedb.org/3/discover/movie?api_key={api-key}&language=en-US&include_adult=false&include_video=false&page=1";
+    private final String BASE_URL = "https://api.themoviedb.org/3/movie/";
 
     private final int LOADER_ID = 77;
 
@@ -173,10 +173,12 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         String sortBy = mSortBySpinner.getSelectedItem().toString();
 
         if (sortBy.equals(getString(R.string.most_popular))) {
-            builder.appendQueryParameter("sort_by", "popularity.desc");
+            builder.appendPath("popular");
         } else if (sortBy.equals(getString(R.string.highest_rated))) {
-            builder.appendQueryParameter("sort_by", "vote_average.desc");
+            builder.appendPath("top_rated");
         }
+
+        builder.appendQueryParameter("api_key", "{API KEY HERE}"); //TODO Please put your API key here
 
         Uri builtUri = builder.build();
 

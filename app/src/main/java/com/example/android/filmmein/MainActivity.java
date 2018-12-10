@@ -54,7 +54,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Log.e("MAIN ACTIVITY", "ONCREATE CALLED");
 
         //Assign member variables
         mResultsRecycler = (RecyclerView) findViewById(R.id.movie_rv);
@@ -74,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         mMovieAdapter = new MovieAdapter(this);
         mResultsRecycler.setAdapter(mMovieAdapter);
 
-        //TODO Create custom ItemDecoration to space grid items better
+        mResultsRecycler.addItemDecoration(new MovieRecyclerDecoration(this, numberOfColumns));
 
         //Set Spinner options
         ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this, R.array.sort_by_array, android.R.layout.simple_spinner_item);

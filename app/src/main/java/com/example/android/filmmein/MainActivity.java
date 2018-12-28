@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private Spinner mSortBySpinner;
     private List<Movie> mMovieResults;
 
+
     private final String BASE_URL = "https://api.themoviedb.org/3/movie/";
 
     private final int LOADER_ID = 77;

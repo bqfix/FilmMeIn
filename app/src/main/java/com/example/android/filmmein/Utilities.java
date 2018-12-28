@@ -59,13 +59,14 @@ public class Utilities {
             for (int index = 0; index < moviesArray.length(); index++) {
                 JSONObject currentMovie = moviesArray.getJSONObject(index);
 
+                int id = currentMovie.getInt(context.getString(R.string.id_key));
                 String title = currentMovie.getString(context.getString(R.string.title_key));
                 String releaseDate = currentMovie.getString(context.getString(R.string.release_date_key));
                 String posterImageLink = context.getString(R.string.poster_image_link_base) + currentMovie.getString(context.getString(R.string.poster_image_link_key)); //JSON only returns end of URL, needs a base, hence concatenation
                 double voterAverage = currentMovie.getDouble(context.getString(R.string.voter_average_key));
                 String plotSynopsis = currentMovie.getString(context.getString(R.string.plot_synopsis_key));
 
-                movies.add(new Movie(title,releaseDate,posterImageLink,voterAverage,plotSynopsis));
+                movies.add(new Movie(id, title,releaseDate,posterImageLink,voterAverage,plotSynopsis));
             }
 
         } catch (JSONException exception) {

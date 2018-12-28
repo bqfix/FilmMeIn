@@ -15,6 +15,7 @@ public class Movie implements Parcelable {
      *********************************************/
 
     //Member Variables
+    private int mId;
     private String mTitle;
     private String mReleaseDate;
     private String mPosterImageLink;
@@ -24,7 +25,8 @@ public class Movie implements Parcelable {
     private final String LOG_TAG = getClass().getSimpleName();
 
     //Constructor
-    public Movie(String title, String releaseDate, String posterImageLink, double voterAverage, String plotSynopsis) {
+    public Movie(int id, String title, String releaseDate, String posterImageLink, double voterAverage, String plotSynopsis) {
+        mId = id;
         mTitle = title;
         mPosterImageLink = posterImageLink;
         mVoterAverage = voterAverage;
@@ -44,6 +46,10 @@ public class Movie implements Parcelable {
     }
 
     //Getter methods
+
+    public int getId() {
+        return mId;
+    }
     public String getTitle() {
         return mTitle;
     }
@@ -69,6 +75,7 @@ public class Movie implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.mId);
         dest.writeString(this.mTitle);
         dest.writeString(this.mReleaseDate);
         dest.writeString(this.mPosterImageLink);
@@ -77,6 +84,7 @@ public class Movie implements Parcelable {
     }
 
     protected Movie(Parcel in) {
+        this.mId = in.readInt();
         this.mTitle = in.readString();
         this.mReleaseDate = in.readString();
         this.mPosterImageLink = in.readString();

@@ -29,6 +29,7 @@
     <!-- Utilities Strings -->
     <!-- JSON Keys -->
     <string name="json_results_key" translatable="false">results</string>
+    <string name="id_key" translatable="false">id</string>
     <string name="title_key" translatable="false">title</string>
     <string name="release_date_key" translatable="false">release_date</string>
     <string name="poster_image_link_key" translatable="false">poster_path</string>

@@ -9,6 +9,10 @@ import android.util.Log;
 @Database(entities = {MovieEntry.class}, version = 1, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
+    /*********************************************
+     * A class to instantiate and access the DB  *
+     *********************************************/
+
     private static final String LOG_TAG = AppDatabase.class.getSimpleName();
 
     private static final Object LOCK = new Object();

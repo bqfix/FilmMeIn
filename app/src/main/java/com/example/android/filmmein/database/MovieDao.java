@@ -16,18 +16,18 @@ import java.util.List;
 @Dao
 public interface MovieDao {
 
+    /*********************************************
+     * Methods that can be called on the DB.     *
+     * Should never need update.                 *
+     *********************************************/
+
+
     @Query("SELECT * FROM movies ORDER BY title")
     LiveData<List<Movie>> loadAllFavorites();
 
     @Insert
     void insertTask(MovieEntry movieEntry);
 
-    @Update(onConflict = OnConflictStrategy.REPLACE)
-    void updateTask(MovieEntry movieEntry);
-
     @Delete
     void deleteTask(MovieEntry movieEntry);
-
-    @Query("SELECT * FROM movies WHERE id = :id")
-    LiveData<MovieEntry> loadMovieById(int id);
 }

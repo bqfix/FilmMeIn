@@ -6,6 +6,10 @@ import android.arch.persistence.room.PrimaryKey;
 @Entity(tableName = "movies")
 public class MovieEntry {
 
+    /*********************************************
+     * A class representing an entry into the DB *
+     *********************************************/
+
     @PrimaryKey
     private int id;
     private String title;

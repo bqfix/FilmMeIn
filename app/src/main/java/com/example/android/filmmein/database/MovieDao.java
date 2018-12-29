@@ -5,9 +5,7 @@ import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
-import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
-import android.arch.persistence.room.Update;
 
 import com.example.android.filmmein.Movie;
 
@@ -22,12 +20,15 @@ public interface MovieDao {
      *********************************************/
 
 
-    @Query("SELECT * FROM movies ORDER BY title")
+    @Query("SELECT * FROM favorites ORDER BY mTitle")
     LiveData<List<Movie>> loadAllFavorites();
 
     @Insert
-    void insertTask(MovieEntry movieEntry);
+    void insertMovie(Movie movie);
 
     @Delete
-    void deleteTask(MovieEntry movieEntry);
+    void deleteMovie(Movie movie);
+
+    @Query("SELECT * FROM favorites WHERE mId = :id")
+    LiveData<Movie> loadMovieById(int id);
 }

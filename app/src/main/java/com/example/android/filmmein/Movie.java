@@ -1,13 +1,18 @@
 package com.example.android.filmmein;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+@Entity(tableName = "favorites")
 public class Movie implements Parcelable {
     /*********************************************
      * A class to hold a movie object,           *
@@ -15,6 +20,7 @@ public class Movie implements Parcelable {
      *********************************************/
 
     //Member Variables
+    @PrimaryKey
     private int mId;
     private String mTitle;
     private String mReleaseDate;
@@ -22,6 +28,7 @@ public class Movie implements Parcelable {
     private double mVoterAverage;
     private String mPlotSynopsis;
 
+    @Ignore
     private final String LOG_TAG = getClass().getSimpleName();
 
     //Constructor
@@ -32,7 +39,7 @@ public class Movie implements Parcelable {
         mVoterAverage = voterAverage;
         mPlotSynopsis = plotSynopsis;
 
-        //Automatically format date
+        //Automatically format date, if it fails, display date as is.
         try {
             SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd");
             SimpleDateFormat outputFormat = new SimpleDateFormat("MMMM dd, yyyy", Locale.US);
@@ -40,7 +47,7 @@ public class Movie implements Parcelable {
             Date inputDate = inputFormat.parse(releaseDate);
             mReleaseDate = outputFormat.format(inputDate);
         } catch (ParseException exception) {
-            mReleaseDate = null;
+            mReleaseDate = releaseDate;
             Log.e(LOG_TAG, exception.getMessage());
         }
     }
@@ -50,18 +57,23 @@ public class Movie implements Parcelable {
     public int getId() {
         return mId;
     }
+
     public String getTitle() {
         return mTitle;
     }
+
     public String getReleaseDate() {
         return mReleaseDate;
     }
+
     public String getPosterImageLink() {
         return mPosterImageLink;
     }
+
     public double getVoterAverage() {
         return mVoterAverage;
     }
+
     public String getPlotSynopsis() {
         return mPlotSynopsis;
     }

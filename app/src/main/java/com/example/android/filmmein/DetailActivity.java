@@ -3,12 +3,14 @@ package com.example.android.filmmein;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.android.filmmein.database.AppDatabase;
 import com.squareup.picasso.Picasso;
 
 public class DetailActivity extends AppCompatActivity {
@@ -18,11 +20,16 @@ public class DetailActivity extends AppCompatActivity {
      *********************************************/
 
     //Member Variables
-    Movie mMovie = null;
-    ImageView mPosterView;
-    TextView mReleaseDate;
-    TextView mVoterAverage;
-    TextView mSynopsis;
+    private Movie mMovie = null;
+    private ImageView mPosterView;
+    private TextView mReleaseDate;
+    private TextView mVoterAverage;
+    private TextView mSynopsis;
+    private FloatingActionButton mFavoriteButton;
+
+    private AppDatabase mdb;
+
+    private boolean mFavorited = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +53,12 @@ public class DetailActivity extends AppCompatActivity {
         mReleaseDate = (TextView) findViewById(R.id.release_date_tv);
         mVoterAverage = (TextView) findViewById(R.id.voter_average_tv);
         mSynopsis = (TextView) findViewById(R.id.synopsis_tv);
+        mFavoriteButton = (FloatingActionButton) findViewById(R.id.favorite_fab);
+
+        //Get Database Instance
+        mdb = AppDatabase.getInstance(this);
+
+
 
         //Check orientation to set height of Poster
         Resources resources = this.getResources();

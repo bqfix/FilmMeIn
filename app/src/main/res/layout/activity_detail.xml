@@ -94,8 +94,20 @@
 
             </LinearLayout>
 
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/favorite_fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_margin="16dp"
+                android:tint="@android:color/white"
+                android:src="@android:drawable/star_off"/>
+
 
         </LinearLayout>
+
+
+
     </ScrollView>
 
 </LinearLayout>

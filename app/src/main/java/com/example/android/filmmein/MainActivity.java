@@ -1,5 +1,7 @@
 package com.example.android.filmmein;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -82,7 +84,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         mSortBySpinner.setAdapter(spinnerAdapter);
 
 
-
         //Check for saved movie results
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey(getString(R.string.movie_results_key))) {
@@ -114,10 +115,13 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
                 String newlySelectedSortBySelection = mSortBySpinner.getSelectedItem().toString();
                 //This if-else is necessary to prevent unnecessary Loader requests when loading from savedInstanceState
                 //Compare spinner value to currently saved String
-                if (!(newlySelectedSortBySelection.equals(mSavedSortBySelection))) {
-                    checkNetworkStatusAndExecute(); //Create new loader request if it is has changed (i.e. user has selected a new value)
+                if (!(newlySelectedSortBySelection.equals(mSavedSortBySelection)) && !(newlySelectedSortBySelection.equals(getString(R.string.favorites)))) {
+                    checkNetworkStatusAndExecute(); //Create new loader request if it is has changed to one of the values that requires internet querying (i.e. user has selected a new value other than favorites)
                     mSavedSortBySelection = newlySelectedSortBySelection;
-                } //Else, do not make a Loader request
+                } else if (newlySelectedSortBySelection.equals(getString(R.string.favorites))) { //Else, do not make a Loader request, and load favorites if selected (ViewModel/LiveData will prevent unnecessary queries)
+                    setupViewModel();
+                    mSavedSortBySelection = newlySelectedSortBySelection;
+                }
             }
 
             @Override
@@ -179,7 +183,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
             builder.appendPath("top_rated");
         }
 
-        builder.appendQueryParameter("api_key", "{API KEY HERE}"); //TODO Please put your API key here
+        builder.appendQueryParameter("api_key", "{API-key here}"); //TODO Please put your API key here
 
         Uri builtUri = builder.build();
 
@@ -247,5 +251,16 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         //Save value of spinner
         String currentSpinnerValue = mSortBySpinner.getSelectedItem().toString();
         outState.putString(getString(R.string.spinner_value_key), currentSpinnerValue);
+    }
+
+    //Helper method to make calls to the Database
+    private void setupViewModel() {
+        MainViewModel viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+        viewModel.getMovies().observe(this, new Observer<List<Movie>>() {
+            @Override
+            public void onChanged(@Nullable List<Movie> movies) {
+                mMovieAdapter.setMovies(movies);
+            }
+        });
     }
 }

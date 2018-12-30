@@ -9,9 +9,11 @@
     <string-array name="sort_by_array">
         <item>@string/most_popular</item>
         <item>@string/highest_rated</item>
+        <item>@string/favorites</item>
     </string-array>
     <string name="most_popular">Most Popular</string>
     <string name="highest_rated">Highest Rated</string>
+    <string name="favorites">Favorites</string>
     <string name="movie_results_key" translatable="false">movie_results</string>
     <string name="spinner_value_key" translatable="false">spinner_value</string>
 

@@ -1,11 +1,15 @@
 package com.example.android.filmmein;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -29,9 +33,11 @@ public class DetailActivity extends AppCompatActivity {
     private TextView mSynopsis;
     private FloatingActionButton mFavoriteButton;
 
-    private AppDatabase mdb;
+    private AppDatabase mDb;
 
-    private boolean mFavorited = false;
+    private Movie mDatabaseMovie;
+
+    private boolean mIsFavorited = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,8 +64,23 @@ public class DetailActivity extends AppCompatActivity {
         mFavoriteButton = (FloatingActionButton) findViewById(R.id.favorite_fab);
 
         //Get Database Instance
-        mdb = AppDatabase.getInstance(this);
+        mDb = AppDatabase.getInstance(this);
 
+        //Check if movie is in database by attempting to query the database for it via ID
+        DetailViewModelFactory factory = new DetailViewModelFactory(mDb, mMovie.getId());
+        final DetailViewModel viewModel
+                = ViewModelProviders.of(this, factory).get(DetailViewModel.class);
+
+        viewModel.getMovie().observe(this, new Observer<Movie>() {
+            @Override
+            public void onChanged(@Nullable Movie movie) {
+                viewModel.getMovie().removeObserver(this);
+                mDatabaseMovie = movie;
+                if (mDatabaseMovie != null) {
+                    movieFavorited();
+                }
+            }
+        });
 
 
         //Check orientation to set height of Poster
@@ -68,7 +89,8 @@ public class DetailActivity extends AppCompatActivity {
             mPosterView.getLayoutParams().height = (int) resources.getDimension(R.dimen.detail_poster_height_landscape);
         } else {
             mPosterView.getLayoutParams().height = (int) resources.getDimension(R.dimen.detail_poster_height_portrait);
-        } mPosterView.requestLayout(); //To refresh the layout regardless
+        }
+        mPosterView.requestLayout(); //To refresh the layout regardless
 
         //Set view contents from parceled movie
         setTitle(mMovie.getTitle());
@@ -83,11 +105,13 @@ public class DetailActivity extends AppCompatActivity {
         mFavoriteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!mFavorited){
+                if (!mIsFavorited) {
                     insertFavoriteMovie();
+                    movieFavorited();
                     Toast.makeText(v.getContext(), R.string.movie_added, Toast.LENGTH_SHORT).show();
-                } else if (mFavorited) {
+                } else if (mIsFavorited) {
                     deleteFavoriteMovie();
+                    movieUnfavorited();
                     Toast.makeText(v.getContext(), R.string.movie_deleted, Toast.LENGTH_SHORT).show();
                 }
             }
@@ -99,7 +123,7 @@ public class DetailActivity extends AppCompatActivity {
         AppExecutors.getInstance().diskIO().execute(new Runnable() {
             @Override
             public void run() {
-                mdb.movieDao().insertMovie(mMovie);
+                mDb.movieDao().insertMovie(mMovie);
             }
         });
     }
@@ -109,8 +133,20 @@ public class DetailActivity extends AppCompatActivity {
         AppExecutors.getInstance().diskIO().execute(new Runnable() {
             @Override
             public void run() {
-                mdb.movieDao().deleteMovie(mMovie);
+                mDb.movieDao().deleteMovie(mMovie);
             }
         });
+    }
+
+    //Helper method to call when a movie is favorited
+    private void movieFavorited() {
+        mIsFavorited = true;
+        mFavoriteButton.setImageDrawable(getResources().getDrawable(android.R.drawable.star_on));
+    }
+
+    //Helper method to call when a movie is unfavorited
+    private void movieUnfavorited() {
+        mIsFavorited = false;
+        mFavoriteButton.setImageDrawable(getResources().getDrawable(android.R.drawable.star_off));
     }
 }

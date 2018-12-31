@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private Spinner mSortBySpinner;
     private List<Movie> mMovieResults;
 
+    private final String LOG_TAG = getClass().getSimpleName();
 
     private final String BASE_URL = "https://api.themoviedb.org/3/movie/";
 
@@ -84,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         mSortBySpinner.setAdapter(spinnerAdapter);
 
 
+
         //Check for saved movie results
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey(getString(R.string.movie_results_key))) {
@@ -99,14 +101,13 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
             if (savedInstanceState.containsKey(getString(R.string.spinner_value_key))) {
                 mSavedSortBySelection = savedInstanceState.getString(getString(R.string.spinner_value_key));
             }
-
         } else {
             //Else check network status and initiate or restart Loader
             checkNetworkStatusAndExecute();
-
             //On Initial Creation, save value of spinner for comparison in OnItemSelectedListener
             mSavedSortBySelection = mSortBySpinner.getSelectedItem().toString();
         }
+
 
         //Set OnItemSelectedListener to spinner
         mSortBySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -183,7 +184,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
             builder.appendPath("top_rated");
         }
 
-        builder.appendQueryParameter("api_key", "{API-key here}"); //TODO Please put your API key here
+        builder.appendQueryParameter("api_key", "{API-KEY HERE}"); //TODO Please put your API key here
 
         Uri builtUri = builder.build();
 
@@ -192,10 +193,15 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     @Override
     public void onLoadFinished(@NonNull Loader<List<Movie>> loader, List<Movie> movies) {
-        //Set movies to RecyclerView
-        mMovieAdapter.setMovies(movies);
 
-        //Show Error or Results
+        //Set movies to RecyclerView unless on Favorites tab.
+        if (!(mSortBySpinner.getSelectedItem().toString().equals(getString(R.string.favorites)))) {
+            mMovieAdapter.setMovies(movies);
+        } else {
+            return;
+        }
+
+        //Return if currently set to favorites, as load is unnecessary, otherwise show Error or Results
         if (movies != null && !movies.isEmpty()) {
             mMovieResults = movies; //Save current set of movies as member variable
             showResults();
@@ -259,6 +265,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         viewModel.getMovies().observe(this, new Observer<List<Movie>>() {
             @Override
             public void onChanged(@Nullable List<Movie> movies) {
+                mMovieResults = movies;
                 mMovieAdapter.setMovies(movies);
             }
         });

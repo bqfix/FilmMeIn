@@ -28,6 +28,9 @@
     <string name="intent_extra_key" translatable="false">movie</string>
     <string name="detail_error_message">Movie details not found.</string>
 
+    <string name="movie_added">Added to favorites.</string>
+    <string name="movie_deleted">Removed from favorites.</string>
+
     <!-- Utilities Strings -->
     <!-- JSON Keys -->
     <string name="json_results_key" translatable="false">results</string>

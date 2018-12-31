@@ -6,11 +6,13 @@ import android.content.res.Resources;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.filmmein.database.AppDatabase;
+import com.example.android.filmmein.database.AppExecutors;
 import com.squareup.picasso.Picasso;
 
 public class DetailActivity extends AppCompatActivity {
@@ -76,5 +78,39 @@ public class DetailActivity extends AppCompatActivity {
         mReleaseDate.setText(mMovie.getReleaseDate());
         mVoterAverage.setText(Double.toString(mMovie.getVoterAverage()));
         mSynopsis.setText(mMovie.getPlotSynopsis());
+
+        //Set onclicklistener to favorite button
+        mFavoriteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!mFavorited){
+                    insertFavoriteMovie();
+                    Toast.makeText(v.getContext(), R.string.movie_added, Toast.LENGTH_SHORT).show();
+                } else if (mFavorited) {
+                    deleteFavoriteMovie();
+                    Toast.makeText(v.getContext(), R.string.movie_deleted, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    //Helper method to create executor to insert favorite movie
+    private void insertFavoriteMovie() {
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mdb.movieDao().insertMovie(mMovie);
+            }
+        });
+    }
+
+    //Helper method to create executor to delete favorite movie
+    private void deleteFavoriteMovie() {
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mdb.movieDao().deleteMovie(mMovie);
+            }
+        });
     }
 }

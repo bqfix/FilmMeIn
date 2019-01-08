@@ -21,6 +21,7 @@ import com.example.android.filmmein.database.AppExecutors;
 import com.squareup.picasso.Picasso;
 
 import java.net.URL;
+import java.util.List;
 
 public class DetailActivity extends AppCompatActivity {
     /*********************************************
@@ -97,7 +98,7 @@ public class DetailActivity extends AppCompatActivity {
         //Get trailer's Uri
         Uri videosUri = createVideosUri();
         URL videosURL = Utilities.buildURL(videosUri.toString());
-        String videosJSON = Utilities.makeHttpRequest(videosURL);
+        String videosJSON = Utilities.makeHttpRequest(videosURL); //TODO off main thread
         final Uri trailerUri = Utilities.parseMovieForTrailer(this, videosJSON);
 
         //Set trailer button to open an intent using the previously parsed Uri
@@ -109,7 +110,15 @@ public class DetailActivity extends AppCompatActivity {
             }
         });
 
-        //TODO Background thread to get JSON for reviews
+
+        //Get trailer's reviews
+        Uri reviewsUri = createReviewsUri();
+        URL reviewsURL = Utilities.buildURL(reviewsUri.toString());
+        String reviewsJSON = Utilities.makeHttpRequest(reviewsURL); //TODO off main thread
+        List<String> reviews = Utilities.parseMovieForReviews(this, reviewsJSON);
+
+        //TODO create simple listview to display reviews
+
 
 
         //Check orientation to set height of Poster
@@ -185,6 +194,17 @@ public class DetailActivity extends AppCompatActivity {
         Uri.Builder builder = videoUri.buildUpon();
         builder.appendPath(mMovieID);
         builder.appendPath(getString(R.string.videos));
+        builder.appendQueryParameter(getString(R.string.api_key_key), getString(R.string.api_key));
+
+        return builder.build();
+    }
+
+    //Helper method to create Uri to access the JSON for the movies' reviews
+    private Uri createReviewsUri() {
+        Uri videoUri = Uri.parse(BASE_MOVIE_URL);
+        Uri.Builder builder = videoUri.buildUpon();
+        builder.appendPath(mMovieID);
+        builder.appendPath(getString(R.string.reviews));
         builder.appendQueryParameter(getString(R.string.api_key_key), getString(R.string.api_key));
 
         return builder.build();

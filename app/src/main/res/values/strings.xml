@@ -36,6 +36,7 @@
     <string name="show_trailer">Show Trailer</string>
 
     <string name="videos">videos</string>
+    <string name="reviews">reviews</string>
 
     <!-- Utilities Strings -->
     <!-- JSON Movie Keys -->
@@ -55,6 +56,10 @@
     <string name="video_site_youtube" translatable="false">Youtube</string>
     <string name="video_link_query" translatable="false">v</string>
     <string name="video_link_key" translatable="false">key</string>
+
+    <!-- JSON Reviews Keys -->
+    <string name="reviews_results_key" translatable="false">results</string>
+    <string name="reviews_content_key" translatable="false">content</string>
 
     <!-- Poster Image Link Start -->
     <string name="poster_image_link_base" translatable="false">http://image.tmdb.org/t/p/original</string>

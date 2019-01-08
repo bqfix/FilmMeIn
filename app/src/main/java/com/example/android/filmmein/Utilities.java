@@ -115,6 +115,30 @@ public class Utilities {
         return movieUri;
     }
 
+    /**
+     * A method to parse JSON and return a list of the reviews for the movie (no names, want to keep it anonymous)
+     * @param context from the Activity calling the method, used to access resources
+     * @param stringJSON to be parsed
+     * @return a list of reviews
+     */
+    public static List<String> parseMovieForReviews(Context context, String stringJSON){
+        List<String> reviews = new ArrayList<String>();
+        try {
+            JSONObject json = new JSONObject(stringJSON);
+
+            JSONArray results = json.getJSONArray(context.getString(R.string.reviews_results_key));
+
+            for (int index = 0; index < results.length(); index++) {
+                JSONObject currentReview = results.getJSONObject(index);
+                String reviewContent = currentReview.getString(context.getString(R.string.reviews_content_key));
+                reviews.add(reviewContent);
+            }
+        } catch (JSONException exception) {
+            Log.e(LOG_TAG, exception.getMessage());
+        }
+
+        return reviews;
+    }
 
     /**
      * Builds the URL

@@ -5,12 +5,13 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,6 +19,8 @@ import android.widget.Toast;
 import com.example.android.filmmein.database.AppDatabase;
 import com.example.android.filmmein.database.AppExecutors;
 import com.squareup.picasso.Picasso;
+
+import java.net.URL;
 
 public class DetailActivity extends AppCompatActivity {
     /*********************************************
@@ -32,12 +35,17 @@ public class DetailActivity extends AppCompatActivity {
     private TextView mVoterAverage;
     private TextView mSynopsis;
     private FloatingActionButton mFavoriteButton;
+    private Button mTrailerButton;
 
     private AppDatabase mDb;
 
     private Movie mDatabaseMovie;
 
     private boolean mIsFavorited = false;
+
+    private final String BASE_MOVIE_URL = "https://api.themoviedb.org/3/movie/";
+
+    private String mMovieID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +70,7 @@ public class DetailActivity extends AppCompatActivity {
         mVoterAverage = (TextView) findViewById(R.id.voter_average_tv);
         mSynopsis = (TextView) findViewById(R.id.synopsis_tv);
         mFavoriteButton = (FloatingActionButton) findViewById(R.id.favorite_fab);
+        mTrailerButton = (Button) findViewById(R.id.trailer_button);
 
         //Get Database Instance
         mDb = AppDatabase.getInstance(this);
@@ -81,6 +90,26 @@ public class DetailActivity extends AppCompatActivity {
                 }
             }
         });
+
+        //Set movie ID in preparation for following methods
+        mMovieID = String.valueOf(mMovie.getId());
+
+        //Get trailer's Uri
+        Uri videosUri = createVideosUri();
+        URL videosURL = Utilities.buildURL(videosUri.toString());
+        String videosJSON = Utilities.makeHttpRequest(videosURL);
+        final Uri trailerUri = Utilities.parseMovieForTrailer(this, videosJSON);
+
+        //Set trailer button to open an intent using the previously parsed Uri
+        mTrailerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent trailerIntent = new Intent(Intent.ACTION_VIEW, trailerUri);
+                startActivity(trailerIntent);
+            }
+        });
+
+        //TODO Background thread to get JSON for reviews
 
 
         //Check orientation to set height of Poster
@@ -148,5 +177,16 @@ public class DetailActivity extends AppCompatActivity {
     private void movieUnfavorited() {
         mIsFavorited = false;
         mFavoriteButton.setImageDrawable(getResources().getDrawable(android.R.drawable.star_off));
+    }
+
+    //Helper method to create Uri to access the JSON for the movies' videos
+    private Uri createVideosUri() {
+        Uri videoUri = Uri.parse(BASE_MOVIE_URL);
+        Uri.Builder builder = videoUri.buildUpon();
+        builder.appendPath(mMovieID);
+        builder.appendPath(getString(R.string.videos));
+        builder.appendQueryParameter(getString(R.string.api_key_key), getString(R.string.api_key));
+
+        return builder.build();
     }
 }

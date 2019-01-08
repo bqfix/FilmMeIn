@@ -7,12 +7,28 @@
     android:orientation="vertical"
     tools:context=".DetailActivity">
 
-    <ImageView
-        android:id="@+id/detail_poster_iv"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/detail_poster_height_portrait"
-        android:scaleType="centerCrop"
-        tools:src="@drawable/test_poster" />
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/detail_poster_iv"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/detail_poster_height_portrait"
+            android:scaleType="centerCrop"
+            tools:src="@drawable/test_poster" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/favorite_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="16dp"
+            android:src="@android:drawable/star_off"
+            android:tint="@android:color/white" />
+
+    </FrameLayout>
+
 
     <ScrollView
         android:layout_width="match_parent"
@@ -28,23 +44,23 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingBottom="8dp"
-                android:paddingTop="8dp">
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:paddingRight="8dp"
                     android:text="@string/release_date"
-                    android:textColor="@android:color/black"
-                    android:paddingRight="8dp"/>
+                    android:textColor="@android:color/black" />
 
                 <TextView
                     android:id="@+id/release_date_tv"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    tools:text="September 19, 2007"
-                    android:textColor="@android:color/black"/>
+                    android:textColor="@android:color/black"
+                    tools:text="September 19, 2007" />
 
             </LinearLayout>
 
@@ -57,17 +73,17 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:paddingRight="8dp"
                     android:text="@string/voter_average"
-                    android:textColor="@android:color/black"
-                    android:paddingRight="8dp"/>
+                    android:textColor="@android:color/black" />
 
                 <TextView
                     android:id="@+id/voter_average_tv"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    tools:text="8.5"
-                    android:textColor="@android:color/black"/>
+                    android:textColor="@android:color/black"
+                    tools:text="8.5" />
 
             </LinearLayout>
 
@@ -80,32 +96,32 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:paddingRight="8dp"
                     android:text="@string/synopsis"
-                    android:textColor="@android:color/black"
-                    android:paddingRight="8dp"/>
+                    android:textColor="@android:color/black" />
 
                 <TextView
                     android:id="@+id/synopsis_tv"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    tools:text="A ticking-time-bomb insomniac and a slippery soap salesman channel primal male aggression into a shocking new form of therapy. Their concept catches on, with underground fight clubs forming in every town, until an eccentric gets in the way and ignites an out-of-control spiral toward oblivion."
-                    android:textColor="@android:color/black"/>
+                    android:textColor="@android:color/black"
+                    tools:text="A ticking-time-bomb insomniac and a slippery soap salesman channel primal male aggression into a shocking new form of therapy. Their concept catches on, with underground fight clubs forming in every town, until an eccentric gets in the way and ignites an out-of-control spiral toward oblivion." />
+
 
             </LinearLayout>
 
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/favorite_fab"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|end"
-                android:layout_margin="16dp"
-                android:tint="@android:color/white"
-                android:src="@android:drawable/star_off"/>
+                <Button
+                    android:id="@+id/trailer_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/show_trailer"
+                    android:layout_gravity="center_horizontal"/>
+
+
 
 
         </LinearLayout>
-
 
 
     </ScrollView>

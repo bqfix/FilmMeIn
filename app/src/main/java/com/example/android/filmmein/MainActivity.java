@@ -184,7 +184,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
             builder.appendPath("top_rated");
         }
 
-        builder.appendQueryParameter("api_key", "{API-KEY HERE}"); //TODO Please put your API key here
+        builder.appendQueryParameter(getString(R.string.api_key_key), getString(R.string.api_key));
 
         Uri builtUri = builder.build();
 

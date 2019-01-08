@@ -2,6 +2,7 @@ package com.example.android.filmmein;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
@@ -27,6 +28,8 @@ public class Utilities {
 
     private static final String LOG_TAG = Utilities.class.getSimpleName();
 
+    private static final String BASE_YOUTUBE_URL = "https://www.youtube.com/watch";
+
     /** A method to dynamically check screen size and determine the number of columns a GridLayoutManager in a RecyclerView should create
      *
      * @param context from the Activity housing the RecyclerView
@@ -49,7 +52,7 @@ public class Utilities {
      * @param stringJSON to be parsed
      * @return the list of movies created from the JSON
      */
-    public static List<Movie> parseJSON(Context context, String stringJSON){
+    public static List<Movie> parseJSONForMovieResults(Context context, String stringJSON){
         List<Movie> movies = new ArrayList<>();
         try {
             JSONObject json = new JSONObject(stringJSON);
@@ -75,6 +78,41 @@ public class Utilities {
 
 
         return movies;
+    }
+
+    /**
+     * A method to parse JSON and return a movie's trailer link in the form of a Uri
+     * @param context from the Activity calling the method, used to access resources
+     * @param stringJSON to be parsed
+     * @return a Uri to access the trailer
+     */
+    public static Uri parseMovieForTrailer(Context context, String stringJSON){
+        Uri movieUri = Uri.parse(BASE_YOUTUBE_URL);
+        try {
+            JSONObject json = new JSONObject(stringJSON);
+
+            JSONArray results = json.getJSONArray(context.getString(R.string.video_results_key));
+
+            for (int index = 0; index < results.length(); index++) {
+                JSONObject currentVideo = results.getJSONObject(index);
+                //Check each video in the list to find the first instance of a trailer
+                String videoType = currentVideo.getString(context.getString(R.string.video_type_key));
+                String videoSite = currentVideo.getString(context.getString(R.string.video_site_key));
+
+                //If it is, build on the youtube link if youtube is the supported site
+                if (videoType.equals(context.getString(R.string.video_type_trailer)) && videoSite.equals(context.getString(R.string.video_site_youtube))) {
+                    Uri.Builder builder = movieUri.buildUpon();
+                    //Append query, " v = video's key "
+                    builder.appendQueryParameter(context.getString(R.string.video_link_query), currentVideo.getString(context.getString(R.string.video_link_key)));
+                    movieUri = builder.build();
+                    break;
+                }
+            }
+        } catch (JSONException exception) {
+            Log.e(LOG_TAG, exception.getMessage());
+        }
+
+        return movieUri;
     }
 
 

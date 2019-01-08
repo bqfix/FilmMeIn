@@ -34,6 +34,6 @@ public class MovieLoader extends AsyncTaskLoader<List<Movie>> {
         }
         URL url = Utilities.buildURL(mUrlString);
         String jsonResponse = Utilities.makeHttpRequest(url);
-        return Utilities.parseJSON(getContext(), jsonResponse);
+        return Utilities.parseJSONForMovieResults(getContext(), jsonResponse);
     }
 }

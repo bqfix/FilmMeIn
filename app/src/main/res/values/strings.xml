@@ -31,8 +31,12 @@
     <string name="movie_added">Added to favorites.</string>
     <string name="movie_deleted">Removed from favorites.</string>
 
+    <string name="show_trailer">Show Trailer</string>
+
+    <string name="videos">videos</string>
+
     <!-- Utilities Strings -->
-    <!-- JSON Keys -->
+    <!-- JSON Movie Keys -->
     <string name="json_results_key" translatable="false">results</string>
     <string name="id_key" translatable="false">id</string>
     <string name="title_key" translatable="false">title</string>
@@ -40,6 +44,15 @@
     <string name="poster_image_link_key" translatable="false">poster_path</string>
     <string name="voter_average_key" translatable="false">vote_average</string>
     <string name="plot_synopsis_key" translatable="false">overview</string>
+
+    <!-- JSON Trailer Keys -->
+    <string name="video_results_key" translatable="false">results</string>
+    <string name="video_type_key" translatable="false">type</string>
+    <string name="video_type_trailer" translatable="false">Trailer</string>
+    <string name="video_site_key" translatable="false">site</string>
+    <string name="video_site_youtube" translatable="false">Youtube</string>
+    <string name="video_link_query" translatable="false">v</string>
+    <string name="video_link_key" translatable="false">key</string>
 
     <!-- Poster Image Link Start -->
     <string name="poster_image_link_base" translatable="false">http://image.tmdb.org/t/p/original</string>

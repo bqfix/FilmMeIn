@@ -26,6 +26,7 @@
     <string name="release_date">Release Date:</string>
     <string name="voter_average">Voter Average:</string>
     <string name="synopsis">Plot Synopsis:</string>
+    <string name="reviews_tag">Reviews:</string>
 
     <string name="intent_extra_key" translatable="false">movie</string>
     <string name="detail_error_message">Movie details not found.</string>

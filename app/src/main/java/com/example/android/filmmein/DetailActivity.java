@@ -146,15 +146,15 @@ public class DetailActivity extends AppCompatActivity {
         //TODO create simple listview to display reviews
 
 
-
-        //Check orientation to set height of Poster
-        Resources resources = this.getResources();
-        if (resources.getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            mPosterView.getLayoutParams().height = (int) resources.getDimension(R.dimen.detail_poster_height_landscape);
-        } else {
-            mPosterView.getLayoutParams().height = (int) resources.getDimension(R.dimen.detail_poster_height_portrait);
-        }
-        mPosterView.requestLayout(); //To refresh the layout regardless
+//        TODO remove
+//        //Check orientation to set height of Poster
+//        Resources resources = this.getResources();
+//        if (resources.getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+//            mPosterView.getLayoutParams().height = (int) resources.getDimension(R.dimen.detail_poster_height_landscape);
+//        } else {
+//            mPosterView.getLayoutParams().height = (int) resources.getDimension(R.dimen.detail_poster_height_portrait);
+//        }
+//        mPosterView.requestLayout(); //To refresh the layout regardless
 
         //Set view contents from parceled movie
         setTitle(mMovie.getTitle());

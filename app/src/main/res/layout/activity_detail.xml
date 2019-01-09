@@ -88,20 +88,28 @@
         android:textColor="@android:color/black"
         tools:text="A ticking-time-bomb insomniac and a slippery soap salesman channel primal male aggression into a shocking new form of therapy. Their concept catches on, with underground fight clubs forming in every town, until an eccentric gets in the way and ignites an out-of-control spiral toward oblivion." />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="8dp"
-        android:text="@string/reviews_tag"
-        android:textColor="@android:color/black" />
 
-
-    <ListView
-        android:id="@+id/reviews_lv"
+    <LinearLayout
+        android:id="@+id/reviews_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:paddingBottom="16dp"/>
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="8dp"
+            android:text="@string/reviews_tag"
+            android:textColor="@android:color/black" />
+
+        <ListView
+            android:id="@+id/reviews_lv"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:paddingBottom="16dp" />
+    </LinearLayout>
 
 
 </LinearLayout>

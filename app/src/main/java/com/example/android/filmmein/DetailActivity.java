@@ -12,8 +12,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,6 +41,8 @@ public class DetailActivity extends AppCompatActivity {
     private TextView mSynopsis;
     private FloatingActionButton mFavoriteButton;
     private Button mTrailerButton;
+    private ListView mReviewsListView;
+    private LinearLayout mReviewsLayout;
 
     private AppDatabase mDb;
 
@@ -73,6 +78,8 @@ public class DetailActivity extends AppCompatActivity {
         mSynopsis = (TextView) findViewById(R.id.synopsis_tv);
         mFavoriteButton = (FloatingActionButton) findViewById(R.id.favorite_fab);
         mTrailerButton = (Button) findViewById(R.id.trailer_button);
+        mReviewsListView = (ListView) findViewById(R.id.reviews_lv);
+        mReviewsLayout = (LinearLayout) findViewById(R.id.reviews_layout);
 
         //Get Database Instance
         mDb = AppDatabase.getInstance(this);
@@ -129,8 +136,6 @@ public class DetailActivity extends AppCompatActivity {
         });
 
 
-
-
         //Get trailer's reviews
         Uri reviewsUri = createReviewsUri();
         final URL reviewsURL = Utilities.buildURL(reviewsUri.toString());
@@ -138,23 +143,21 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void run() {
                 String reviewsJSON = Utilities.makeHttpRequest(reviewsURL);
-                List<String> reviews = Utilities.parseMovieForReviews(DetailActivity.this, reviewsJSON);
+                final List<String> reviews = Utilities.parseMovieForReviews(DetailActivity.this, reviewsJSON);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        //Hide reviews section if there are no reviews, else set reviews to list view
+                        if (reviews.isEmpty()){
+                            mReviewsLayout.setVisibility(View.GONE);
+                        } else {
+                            ArrayAdapter<String> adapter = new ArrayAdapter<>(DetailActivity.this, android.R.layout.simple_list_item_1, reviews);
+                            mReviewsListView.setAdapter(adapter);
+                        }
+                    }
+                });
             }
         });
-
-
-        //TODO create simple listview to display reviews
-
-
-//        TODO remove
-//        //Check orientation to set height of Poster
-//        Resources resources = this.getResources();
-//        if (resources.getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-//            mPosterView.getLayoutParams().height = (int) resources.getDimension(R.dimen.detail_poster_height_landscape);
-//        } else {
-//            mPosterView.getLayoutParams().height = (int) resources.getDimension(R.dimen.detail_poster_height_portrait);
-//        }
-//        mPosterView.requestLayout(); //To refresh the layout regardless
 
         //Set view contents from parceled movie
         setTitle(mMovie.getTitle());

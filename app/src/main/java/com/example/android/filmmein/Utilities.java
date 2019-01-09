@@ -28,7 +28,7 @@ public class Utilities {
 
     private static final String LOG_TAG = Utilities.class.getSimpleName();
 
-    private static final String BASE_YOUTUBE_URL = "https://www.youtube.com/watch";
+    public static final String BASE_YOUTUBE_URL = "https://www.youtube.com/watch";
 
     /** A method to dynamically check screen size and determine the number of columns a GridLayoutManager in a RecyclerView should create
      *

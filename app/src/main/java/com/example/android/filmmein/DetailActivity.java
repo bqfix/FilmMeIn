@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -97,25 +98,50 @@ public class DetailActivity extends AppCompatActivity {
 
         //Get trailer's Uri
         Uri videosUri = createVideosUri();
-        URL videosURL = Utilities.buildURL(videosUri.toString());
-        String videosJSON = Utilities.makeHttpRequest(videosURL); //TODO off main thread
-        final Uri trailerUri = Utilities.parseMovieForTrailer(this, videosJSON);
+        final URL videosURL = Utilities.buildURL(videosUri.toString());
 
-        //Set trailer button to open an intent using the previously parsed Uri
-        mTrailerButton.setOnClickListener(new View.OnClickListener() {
+
+
+        AppExecutors.getInstance().networkIO().execute(new Runnable() {
             @Override
-            public void onClick(View v) {
-                Intent trailerIntent = new Intent(Intent.ACTION_VIEW, trailerUri);
-                startActivity(trailerIntent);
+            public void run() {
+                String videosJSON = Utilities.makeHttpRequest(videosURL);
+                final Uri trailerUri = Utilities.parseMovieForTrailer(DetailActivity.this, videosJSON);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        //Set trailer button to open an intent using the previously parsed Uri
+                        mTrailerButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                //Check to make sure the link isn't dead
+                                if (!(trailerUri.toString().equals(Utilities.BASE_YOUTUBE_URL))) {
+                                    Intent trailerIntent = new Intent(Intent.ACTION_VIEW, trailerUri);
+                                    startActivity(trailerIntent);
+                                } else {
+                                    Toast.makeText(DetailActivity.this, getString(R.string.no_youtube_video), Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        });
+                    }
+                });
             }
         });
 
 
+
+
         //Get trailer's reviews
         Uri reviewsUri = createReviewsUri();
-        URL reviewsURL = Utilities.buildURL(reviewsUri.toString());
-        String reviewsJSON = Utilities.makeHttpRequest(reviewsURL); //TODO off main thread
-        List<String> reviews = Utilities.parseMovieForReviews(this, reviewsJSON);
+        final URL reviewsURL = Utilities.buildURL(reviewsUri.toString());
+        AppExecutors.getInstance().networkIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                String reviewsJSON = Utilities.makeHttpRequest(reviewsURL);
+                List<String> reviews = Utilities.parseMovieForReviews(DetailActivity.this, reviewsJSON);
+            }
+        });
+
 
         //TODO create simple listview to display reviews
 

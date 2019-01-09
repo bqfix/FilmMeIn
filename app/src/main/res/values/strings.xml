@@ -38,6 +38,8 @@
     <string name="videos">videos</string>
     <string name="reviews">reviews</string>
 
+    <string name="no_youtube_video">No YouTube video found.</string>
+
     <!-- Utilities Strings -->
     <!-- JSON Movie Keys -->
     <string name="json_results_key" translatable="false">results</string>
@@ -53,7 +55,7 @@
     <string name="video_type_key" translatable="false">type</string>
     <string name="video_type_trailer" translatable="false">Trailer</string>
     <string name="video_site_key" translatable="false">site</string>
-    <string name="video_site_youtube" translatable="false">Youtube</string>
+    <string name="video_site_youtube" translatable="false">YouTube</string>
     <string name="video_link_query" translatable="false">v</string>
     <string name="video_link_key" translatable="false">key</string>
 

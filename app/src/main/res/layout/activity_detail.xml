@@ -16,7 +16,7 @@
             android:id="@+id/detail_poster_iv"
             android:layout_width="@dimen/poster_width"
             android:layout_height="@dimen/poster_height"
-            android:contentDescription=""
+            android:contentDescription="@string/movie_poster_descrip"
             android:foreground="?android:attr/selectableItemBackground"
             android:padding="8dp"
             android:scaleType="centerCrop"
@@ -79,12 +79,16 @@
 
     </LinearLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"/>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:padding="8dp">
+        android:layout_margin="8dp">
 
         <TextView
             android:id="@+id/synopsis_tv"
@@ -95,11 +99,16 @@
 
     </ScrollView>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"/>
+
     <LinearLayout
         android:id="@+id/reviews_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_weight="2"
         android:orientation="vertical">
 
         <TextView

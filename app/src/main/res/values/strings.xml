@@ -41,6 +41,8 @@
 
     <string name="no_youtube_video">No YouTube video found.</string>
 
+    <string name="movie_poster_descrip">Movie Poster</string>
+
     <!-- Utilities Strings -->
     <!-- JSON Movie Keys -->
     <string name="json_results_key" translatable="false">results</string>

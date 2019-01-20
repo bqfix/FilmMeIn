@@ -5,9 +5,11 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -168,6 +170,24 @@ public class DetailActivity extends AppCompatActivity {
         mVoterAverage.setText(Double.toString(mMovie.getVoterAverage()));
         mSynopsis.setText(mMovie.getPlotSynopsis());
 
+        //Set color of vote average circle based on score
+        int adjustedVoteAverage = (int) mMovie.getVoterAverage();
+        int backgroundColor = ContextCompat.getColor(this, R.color.vote9to10);
+        GradientDrawable backgroundCircle = (GradientDrawable) mVoterAverage.getBackground();
+        switch (adjustedVoteAverage) {
+            case 10: backgroundColor = ContextCompat.getColor(this, R.color.vote9to10); break;
+            case 9: backgroundColor = ContextCompat.getColor(this, R.color.vote9to10); break;
+            case 8: backgroundColor = ContextCompat.getColor(this, R.color.vote8to9); break;
+            case 7: backgroundColor = ContextCompat.getColor(this, R.color.vote7to8); break;
+            case 6: backgroundColor = ContextCompat.getColor(this, R.color.vote6to7); break;
+            case 5: backgroundColor = ContextCompat.getColor(this, R.color.vote5to6); break;
+            case 4: backgroundColor = ContextCompat.getColor(this, R.color.vote4to5); break;
+            case 3: backgroundColor = ContextCompat.getColor(this, R.color.vote3to4); break;
+            case 2: backgroundColor = ContextCompat.getColor(this, R.color.vote2to3); break;
+            default: backgroundColor = ContextCompat.getColor(this, R.color.vote2down);
+        }
+        backgroundCircle.setColor(backgroundColor);
+
         //Set onclicklistener to favorite button
         mFavoriteButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -238,4 +258,5 @@ public class DetailActivity extends AppCompatActivity {
 
         return builder.build();
     }
+
 }

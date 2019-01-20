@@ -3,4 +3,15 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+
+    <!-- Colors for background of vote circle-->
+    <color name="vote9to10">#49FF00</color>
+    <color name="vote8to9">#9BFF00</color>
+    <color name="vote7to8">#B6FF00</color>
+    <color name="vote6to7">#D1FF00</color>
+    <color name="vote5to6">#FFFF00</color>
+    <color name="vote4to5">#FFD500</color>
+    <color name="vote3to4">#FFA600</color>
+    <color name="vote2to3">#FF6800</color>
+    <color name="vote2down">#FF0000</color>
 </resources>

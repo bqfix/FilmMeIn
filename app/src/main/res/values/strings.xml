@@ -17,7 +17,7 @@
     <string name="movie_results_key" translatable="false">movie_results</string>
     <string name="spinner_value_key" translatable="false">spinner_value</string>
     <string name="api_key_key" translatable="false">api_key</string>
-    <string name="api_key" translatable="false"></string> <!-- TODO Please Insert API Key-->
+    <string name="api_key" translatable="false">47ba04034a3ebe6cffa7dbc0a0ae4dd8</string> <!-- TODO Please Insert API Key-->
 
     <!-- About Activity Strings -->
     <string name="app_details">This app was created for a class on Udacity.com, as practice in developing Android applications.\n\nIt is not intended for commercial use.\n\nThis product uses the TMDb API but is not endorsed or certified by TMDb.</string>
@@ -42,6 +42,8 @@
     <string name="no_youtube_video">No YouTube video found.</string>
 
     <string name="movie_poster_descrip">Movie Poster</string>
+
+    <string name="movie_poster_transition_key">movie_poster_transition_key</string>
 
     <!-- Utilities Strings -->
     <!-- JSON Movie Keys -->

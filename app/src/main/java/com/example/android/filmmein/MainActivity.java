@@ -1,11 +1,13 @@
 package com.example.android.filmmein;
 
+import android.app.ActivityOptions;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,13 +17,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
@@ -83,7 +85,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this, R.array.sort_by_array, android.R.layout.simple_spinner_item);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSortBySpinner.setAdapter(spinnerAdapter);
-
 
 
         //Check for saved movie results
@@ -162,10 +163,15 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     //Item Click Logic, use the movie that was passed from the ViewHolder's onClickListener, and start intent
     @Override
-    public void onItemClick(Movie movie) {
+    public void onItemClick(Movie movie, ImageView imageView) {
         Intent detailIntent = new Intent(MainActivity.this, DetailActivity.class);
         detailIntent.putExtra(getString(R.string.intent_extra_key), movie);
-        startActivity(detailIntent);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Bundle transitionBundle = ActivityOptions.makeSceneTransitionAnimation(this, imageView, imageView.getTransitionName()).toBundle();
+            startActivity(detailIntent, transitionBundle);
+        } else {
+            startActivity(detailIntent);
+        }
     }
 
 

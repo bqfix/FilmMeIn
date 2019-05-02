@@ -14,6 +14,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -154,7 +156,10 @@ public class DetailActivity extends AppCompatActivity {
                             mReviewsLayout.setVisibility(View.GONE);
                         } else {
                             ArrayAdapter<String> adapter = new ArrayAdapter<>(DetailActivity.this, android.R.layout.simple_list_item_1, reviews);
+                            Animation anim = AnimationUtils.loadAnimation(DetailActivity.this, R.anim.anim_slide_bottom); //Animation
+                            mReviewsListView.startAnimation(anim);
                             mReviewsListView.setAdapter(adapter);
+
                         }
                     }
                 });

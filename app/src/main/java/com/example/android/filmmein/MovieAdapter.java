@@ -46,7 +46,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         public void onClick(View v) {
             int adapterPosition = getAdapterPosition();
             Movie movie = mMovies.get(adapterPosition);
-            mMovieClickHandler.onItemClick(movie);
+            ImageView imageView = v.findViewById(R.id.recycler_poster_iv);
+            mMovieClickHandler.onItemClick(movie, imageView);
         }
     }
 
@@ -93,6 +94,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     //Interface to handle clicks, defined in MainActivity
     public interface MovieClickHandler{
-        void onItemClick(Movie movie);
+        void onItemClick(Movie movie, ImageView imageView);
     }
 }

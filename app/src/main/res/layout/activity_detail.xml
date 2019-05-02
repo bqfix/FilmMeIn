@@ -20,7 +20,8 @@
             android:foreground="?android:attr/selectableItemBackground"
             android:padding="8dp"
             android:scaleType="centerCrop"
-            tools:src="@drawable/test_poster" />
+            tools:src="@drawable/test_poster"
+            android:transitionName="@string/movie_poster_transition_key"/>
 
         <LinearLayout
             android:layout_width="0dp"

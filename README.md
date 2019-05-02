@@ -14,6 +14,7 @@ This project was built for the Udacity Android Developer nanodegree.
 * Utilized a Detail Activity to display further details when a poster is clicked.
 * Allowed users to Favorite movies, which adds the movie to a local SQLite database for ease of access, online and offline.
 * Retrieved results from that SQLite database, to show a Grid of the user's favorited movies.
+* Implemented transition animations between the main activity and the detail activity, including moving/keeping the clicked poster.
 
 ### License
 

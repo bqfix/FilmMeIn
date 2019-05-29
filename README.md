@@ -10,7 +10,7 @@ This project was built for the Udacity Android Developer nanodegree.
 ### What I accomplished in this project:
 
 * Accessed theMovieDb to query for popular or highly rated movies, according to the users choice.
-* Parsed the results to create Movie objects, which are displayed in a Grid using their posters.
+* Parsed the JSON results to create Movie objects, which are displayed in a Grid using their posters.
 * Utilized a Detail Activity to display further details when a poster is clicked.
 * Allowed users to Favorite movies, which adds the movie to a local SQLite database for ease of access, online and offline.
 * Retrieved results from that SQLite database, to show a Grid of the user's favorited movies.
